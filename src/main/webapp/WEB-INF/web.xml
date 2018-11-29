@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+  <display-name>Archetype Created Web Application</display-name>
+  <!--解决中文乱码-->
+  <filter>
+    <filter-name>encodingFilter</filter-name>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <async-supported>true</async-supported>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>encodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <!--配置 Spring 的容器-->
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath*:spring/spring-*.xml</param-value>
+  </context-param>
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+
+  <!--配置 MVC 容器-->
+  <!--将所有的请求都交给 Spring MVC 处理-->
+  <servlet>
+    <servlet-name>app</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:spring/spring-web.xml</param-value>
+    </init-param>
+
+    <!--配置文件的上传和下载-->
+    <load-on-startup>1</load-on-startup>
+    <multipart-config>
+      <!--<location>D:\二学年\IdeaWork\ssm_blog\src\main\webapp\images</location>-->
+      <max-file-size>-1</max-file-size>
+      <max-request-size>-1</max-request-size>
+    </multipart-config>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>app</servlet-name>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+
+  <!--简单的跨域用使用自定义过滤器实现-->
+  <!--<filter>-->
+    <!--<filter-name>CorsFilter</filter-name>-->
+    <!--<filter-class>com.lzx.vo_filter.CorsFilter</filter-class>-->
+    <!--<init-param>-->
+      <!--<param-name>webFilter</param-name>-->
+      <!--<param-value>*</param-value>-->
+    <!--</init-param>-->
+  <!--</filter>-->
+  <!--<filter-mapping>-->
+    <!--<filter-name>CorsFilter</filter-name>-->
+    <!--<url-pattern>/*</url-pattern>-->
+  <!--</filter-mapping>-->
+
+</web-app>

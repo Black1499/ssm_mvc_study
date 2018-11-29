@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<progress value="0" max="100" id="myProgress"></progress>
+<br/>
+<input type="file" multiple="multiple" id="myFile"/><button id="myBtn">ajax</button>
+<br/>
+<img src="" id="myImg"/><br/>
+<audio src="" id="myVideo" controls="controls" autoplay/>
+</body>
+<script src="../js/jquery-3.3.1.min.js"></script>
+<script>
+    document.getElementById("myFile").addEventListener("change", () => {
+        var file = document.getElementById("myFile").files[0];
+        toLoadUrlByObjectUrl(file);
+    });
+
+    document.getElementById("myBtn").addEventListener("click", () => {
+        ajaxFile()
+    });
+
+    // file读取文件
+    function toLoadUrlByFile(file) {
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onprogress = function (event) {
+            var loaded = event.loaded;
+            var total = event.total;
+            document.getElementById("myProgress").value = loaded / total * 100;
+        },
+        reader.onload = function (event) {
+            console.log(event.target.result);
+            document.getElementById("myImg").src = event.target.result;
+            document.getElementById("myVideo").src = event.target.result;
+        }
+    }
+
+    // ObjectUrl读取文件
+    function toLoadUrlByObjectUrl(file) {
+        //var target = event.target.files[0];
+        var url = URL.createObjectURL(file);
+        document.getElementById("myImg").src = url;
+        url.onload = function () {
+            URL.revokeObjectURL(url);
+        }
+    }
+
+
+    function ajaxFile() {
+        $.ajax({
+            url: '/xxx',
+            type: 'post',
+            cache: 'false',
+            contentType: 'multipart/form-data',
+            processData: false,
+            data: document.getElementById("myFile").files[0],
+            xhr: function () {
+                var xhr = $.ajaxSettings.xhr();
+                if (xhr.load) {
+                    xhr.upload.addEventListener("progress", function (event) {
+                        console.log(event);
+                        var loaded = event.loaded;
+                        var total = event.total;
+                        document.getElementById("myProgress").value = loaded / total * 100;
+                        document.getElementById("myProgress").value = loaded / total * 100;
+                    }, false);
+                }
+                return xhr;
+            }
+        });
+    }
+
+</script>
+</html>

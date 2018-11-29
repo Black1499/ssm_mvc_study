@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <!--jdbc 驱动包，等-->
+    <!--<classPathEntry location="/Program Files/IBM/SQLLIB/java/db2java.zip" />-->
+    <context id="generatorContext" targetRuntime="MyBatis3Simple">
+
+        <commentGenerator>
+            <property name="suppressAllComments" value="true" />
+        </commentGenerator>
+        <!--读取数据库-->
+        <jdbcConnection driverClass="org.mariadb.jdbc.Driver"
+                        connectionURL="jdbc:mariadb://localhost/testdb"
+                        userId="root"
+                        password="123456">
+        </jdbcConnection>
+        <!--生成实体类-->
+        <javaModelGenerator targetPackage="com.lzx.entity" targetProject="src\main\java">
+            <property name="trimStrings" value="true" />
+        </javaModelGenerator>
+        <!--生成xml映射文件-->
+        <sqlMapGenerator targetPackage="mappers"  targetProject="src\main\resources">
+        </sqlMapGenerator>
+        <!--生成数据访问层接口-->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.lzx.dao"  targetProject="src\main\java">
+        </javaClientGenerator>
+        <!--需要扫描表格-->
+        <table tableName="employee">
+            <property name="useActualColumnNames" value="true"/>
+        </table>
+    </context>
+</generatorConfiguration>

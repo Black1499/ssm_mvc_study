@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>象棋棋盘</title>
+</head>
+<body>
+<canvas id="myCanvas" width="806" height="906">Canvas画布棋盘</canvas>
+<script type="text/javascript">
+    var board = {
+        ct: null,
+        rect: function () {
+            board.ct.lineWidth = 6;
+            board.ct.strokeStyle = "black";
+            board.ct.strokeRect(0, 0, 806, 906);
+        },
+        rows: function () {
+            for (var i = 100; i <= 800; i += 100) {
+                board.ct.lineWidth = 2;
+                board.ct.beginPath();
+                board.ct.moveTo(0, i)
+                board.ct.lineTo(806, i);
+                board.ct.stroke();
+            }
+        },
+        cols: function () {
+            for (var i = 100; i <= 700; i += 100) {
+                board.ct.lineWidth = 2;
+                board.ct.beginPath();
+                board.ct.moveTo(i, 0)
+                board.ct.lineTo(i, 906);
+                board.ct.stroke();
+            }
+        },
+        middle: function () {
+            // 四个坐标值为 x,y,x的偏移量，y的偏移量
+            board.ct.clearRect(3, 400, 800, 100);
+
+            board.ct.font = "80px yahei";
+            board.ct.fillText("楚河", 100, 480);
+            board.ct.fillText("汉界", 540, 480);
+        },
+        // x，y为第一个点的坐标; m,n为第二个点的坐标
+        slant: function (x, y, m, n) {
+            board.ct.lineWidth = 2;
+            board.ct.beginPath();
+            board.ct.moveTo(x, y)
+            board.ct.lineTo(m, n);
+            board.ct.stroke();
+        },
+        broken: function (x, y) {
+
+            board.slant(60 + x, 185 + y, 90 + x, 185 + y);
+            board.slant(90 + x, 155 + y, 90 + x, 185 + y);
+
+            board.slant(110 + x, 185 + y, 140 + x, 185 + y);
+            board.slant(110 + x, 155 + y, 110 + x, 185 + y);
+
+            board.slant(90 + x, 215 + y, 60 + x, 215 + y);
+            board.slant(90 + x, 215 + y, 90 + x, 245 + y);
+
+            board.slant(110 + x, 215 + y, 140 + x, 215 + y);
+            board.slant(110 + x, 215 + y, 110 + x, 245 + y);
+
+        },
+        init: function () {
+            var canvas = document.getElementById("myCanvas");
+            board.ct = canvas.getContext("2d");
+
+            board.rect();// 棋盘边框
+            board.rows();// 行
+            board.cols(); // 列
+            board.middle();// 楚河，汉界
+
+            board.slant(300, 0, 500, 200);// 斜线
+            board.slant(500, 0, 300, 200);// 斜线
+            board.slant(300, 700, 500, 900);// 斜线
+            board.slant(500, 700, 300, 900);// 斜线
+
+            board.broken(0, 0); // 折线
+            board.broken(600, 0); // 折线
+            board.broken(600, 500); // 折线
+            board.broken(0, 500); // 折线
+
+            board.broken(-100, 100); // 折线
+            board.broken(100, 100); // 折线
+            board.broken(300, 100); // 折线
+            board.broken(500, 100); // 折线
+            board.broken(700, 100); // 折线
+            board.broken(900, 100); // 折线
+
+            board.broken(-100, 400); // 折线
+            board.broken(100, 400); // 折线
+            board.broken(300, 400); // 折线
+            board.broken(500, 400); // 折线
+            board.broken(700, 400); // 折线
+            board.broken(900, 400); // 折线
+        }
+    }
+    board.init();
+</script>
+</body>
+</html>

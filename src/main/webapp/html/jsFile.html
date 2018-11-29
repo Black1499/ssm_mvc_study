@@ -1,0 +1,90 @@
+<html>
+<head>
+    <title>Title</title>
+</head>
+<body>
+<input type="file" multiple="multiple" id="myFile"/>
+<br/>
+<canvas id="myCanvas"></canvas>
+<br/>
+<button id="myBtn">上传</button>
+</body>
+<script src="../js/jquery-3.3.1.min.js"></script>
+<script>
+    var myFile = document.getElementById("myFile");
+    //var myImg = document.getElementById("myImg");
+    var myBtn = document.getElementById("myBtn");
+    var myCanvas = document.getElementById("myCanvas");
+    window.addEventListener("load", () => {
+        all();
+    });
+
+    function all() {
+        myFile.addEventListener("change", () => {
+            yulan(false)
+        });
+        myBtn.addEventListener("click", () => {
+            yulan(true);
+        });
+    }
+
+
+    var myImg = new Image();
+    function yulan(boolean) {
+        var url = URL.createObjectURL(myFile.files[0]);
+        myImg.src = url;
+        //console.log(myImg);
+        console.log("压缩前：" + myFile.files[0].size);
+        myImg.onload = function () {
+            URL.revokeObjectURL(url);
+            yasuo(boolean);
+        }
+    }
+
+    // x为比例
+    function yasuo(boolean) {
+        var pen = myCanvas.getContext("2d");
+        myCanvas.width = myImg.width / 2;
+        myCanvas.height = myImg.height / 2;
+        pen.drawImage(myImg, 0, 0, myImg.width / 2, myImg.height / 2);
+        pen.font = "30px yahei";
+        pen.fillText("lzx绘制", (myImg.width / 2) - 100, (myImg.height / 2) - 10);
+        if (boolean == true) {
+            myCanvas.toBlob(ajax, "image/jpeg");
+        }
+    }
+
+    function ajax(blob) {
+        console.log("压缩后：" + blob.size);
+        var data = new FormData();
+        data.append("file", blob);
+        // fetch("/jsFile", {
+        //     method: 'post',
+        //     body: data
+        // }).then(data => console.log(data));
+        $.ajax({
+            url: "/jsFile",
+            method: "post",
+            data: data,
+            contentType: false, //必须false才会自动加上正确的Content-Type
+            processData: false,  //必须false才会避开jQuery对 formdata 的默认处理
+            xhr: function () { //获取ajaxSettings中的xhr对象，为它的upload属性绑定progress事件的处理函数
+                var myXhr = $.ajaxSettings.xhr();
+                if (myXhr.upload) { //检查upload属性是否存在
+                    //绑定progress事件的回调函数
+                    xhr.upload.addEventListener("progress", function (event) {
+                        console.log(event);
+                        var loaded = event.loaded;
+                        var total = event.total;
+                        console.log(loaded,total);
+                    }, false);
+                }
+                return myXhr; //xhr对象返回给jQuery使用
+            },
+            success: function (data) {
+                alert(data.msg);
+            }
+        });
+    }
+</script>
+</html>

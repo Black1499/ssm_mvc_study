@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!-- jsonp实现跨域-->
+<button id="btnOne">click me</button><br/>
+
+<!-- 通过配置文件进行跨域-->
+<h1>开启文件服务器http-server，点击访问汤姆猫服务器</h1>
+<button id="btnCors">Cors</button><br/>
+<textarea id="text" style="width: 400px; height: 100px;"></textarea>
+<script src="../js/jquery.js"></script>
+<script>
+    $(document).ready(function () {
+        // jsonp完整请求http://localhost:8080/aa?callBack=callBack&_=1543219203733
+        $("#btnOne").click(function(){
+            $.ajax({
+                url: "http://localhost:8080/aa",
+                type: "GET",
+                dataType: "jsonp",  //指定服务器返回的数据类型
+                jsonp: "callBack",   //指定方法参数名称
+                jsonpCallback: "callBack",  //指定回调函数名称
+                success: function (data) {
+                    console.info("调用success");
+                    alert("asfasdfasdf  ");
+                }
+            });
+        });
+
+
+
+
+        $("#btnCors").click(function(){
+           $.get("http://localhost:8080/listAll","",function(data){
+               console.log(data);
+               var x = "";
+               $.each(data,function(i,o){
+                   x += o.id+o.name+o.sex+o.education+o.salary+"\n";
+               })
+               $(text).val(x);
+           })
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:contxt="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!--启用注解扫描-->
+    <contxt:component-scan base-package="com.lzx.web"/>
+
+    <!--启用 mvc 的常用注解-->
+    <!--<mvc:annotation-driven />-->
+
+    <mvc:annotation-driven validator="myValidator"/>
+    <!--自定义验证器 -->
+    <!--<bean id="myValidator" class="com.lzx.validator.MyValidator"/>-->
+
+    <!--JSR303 验证-->
+    <bean id="myValidator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="providerClass" value="org.hibernate.validator.HibernateValidator"/>
+        <property name="validationMessageSource" ref="messageSource"/>
+    </bean>
+
+
+    <!--实现i18n国际化-->
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+        <property name="defaultLocale" value="zh"/>
+    </bean>
+
+    <!--负责加载外部语言文件的-->
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basename" value="classpath:messages/language"/>
+        <property name="defaultEncoding" value="GBK"/>
+    </bean>
+
+
+    <!--配置css文件夹在哪-->
+    <bean id="themeSource" class="org.springframework.ui.context.support.ResourceBundleThemeSource">
+        <property name="basenamePrefix" value="themes/"/> <!-- 哪个文件夹里 -->
+    </bean>
+
+    <!-- 【可选】 -->
+    <!-- 默认情况下，使用的是 FixedThemeResolver 来确定主题名字，默认名字为 theme -->
+    <!-- 可以根据实际情况配置为 SessionThemeResovler/CookieThemeResolver -->
+    <bean id="themeResolver" class="org.springframework.web.servlet.theme.SessionThemeResolver">
+        <property name="defaultThemeName" value="default"/> <!-- 默认主题文件的名字，如果不设置，名为 theme -->
+    </bean>
+
+    <!--全局配置有一定的局限性，开放了所有的访问-->
+    <mvc:cors>
+        <!--允许所有的网站进行跨域访问-->
+        <!--<mvc:mapping path="/**"/>-->
+
+        <!--详细配置符合条件的跨域访问-->
+        <mvc:mapping path="/**"
+                     allowed-headers="Accept,Accept-Language,Content-Language,Content-Type"
+                     allowed-methods="GET,POST,DELETE,PUT"
+                     allowed-origins="http://127.0.0.1:8081"
+                     allow-credentials="true"
+        />
+    </mvc:cors>
+
+    <!--将所有的静态资源交还 Servlet 处理-->
+    <mvc:default-servlet-handler/>
+
+    <!--配置返回页面-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <!--配置上传下载-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver"/>
+</beans>

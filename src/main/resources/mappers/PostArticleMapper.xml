@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lzx.dao.PostArticleMapper">
+  <resultMap id="BaseResultMap" type="com.lzx.entity.PostArticle">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="author_id" jdbcType="INTEGER" property="author_id" />
+    <result column="tilte" jdbcType="VARCHAR" property="tilte" />
+    <result column="up_date" jdbcType="TIMESTAMP" property="up_date" />
+    <result column="context" jdbcType="LONGVARCHAR" property="context" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from post_article
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lzx.entity.PostArticle" useGeneratedKeys="true" keyColumn="id">
+    insert into post_article (author_id, tilte, context)
+    values ( #{author_id,jdbcType=INTEGER}, #{tilte,jdbcType=VARCHAR},
+       #{context,jdbcType=LONGVARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.lzx.entity.PostArticle">
+    update post_article
+    set author_id = #{author_id,jdbcType=INTEGER},
+      tilte = #{tilte,jdbcType=VARCHAR},
+      up_date = #{up_date,jdbcType=TIMESTAMP},
+      context = #{context,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, author_id, tilte, up_date, context
+    from post_article
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, author_id, tilte, up_date, context
+    from post_article
+  </select>
+</mapper>

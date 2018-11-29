@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<br/>
+<input type="file" multiple="multiple" id="myFile"/>
+<br/>
+<canvas id="myCanvas"></canvas><br />
+
+<button btn="myBtn">上传</button>
+</body>
+<script>
+    var myFile = document.getElementById("myFile");
+    //var myImg = document.getElementById("myImg");
+    var myBtn = document.getElementById("myBtn");
+    var myCanvas = document.getElementById("myCanvas");
+    window.addEventListener("load", () => {
+        all();
+    });
+
+    function all() {
+        myFile.addEventListener("change", () => {
+            yulan()
+        });
+
+    }
+
+    var myImg = new Image();
+    function yulan() {
+        var url = URL.createObjectURL(myFile.files[0]);
+        myImg.src = url;
+        //console.log(myImg);
+        console.log("压缩前："+myFile.files[0].size);
+        myImg.onload=function () {
+            URL.revokeObjectURL(url);
+            yasuo(2);
+        }
+    }
+
+    // x为比例
+    function yasuo(x) {
+        //var canvas = document.createElement("canvas");
+
+        var pen = myCanvas.getContext("2d");
+        myCanvas.width = myImg.width / x;
+        myCanvas.height = myImg.height / x;
+        pen.drawImage(myImg, 0, 0, myImg.width / x, myImg.height / x);
+        pen.font ="30px yahei";
+        pen.fillText("lzx绘制", (myImg.width / x) - 100, (myImg.height / x) - 10);
+        myCanvas.toBlob(function(b){
+           //这里发请求
+            console.log("压缩后："+b.size);
+            var data = new FormData();
+            data.append("aa",b);
+            fetch("/upFile",{
+                method:"post",
+                data:data
+            }).then(data => console.log(data));
+        },"image/jpeg");
+    }
+</script>
+</html>
