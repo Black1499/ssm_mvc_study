@@ -7,6 +7,7 @@ import com.lzx.entity.PostAuthor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -35,4 +36,12 @@ public class PostArticleController {
         articleMapper.insert(article);
         return  "redirect:/";
     }
+
+
+//    // 这个异常处理只会在本类中起作用 ,如需多个就多打几个
+//    @ExceptionHandler(RuntimeException.class)
+//    public String catchException(RuntimeException e){
+//        System.out.println(e.getMessage());
+//        return "error";
+//    }
 }
