@@ -31,6 +31,8 @@ public class ArraySort implements Runnable {
         System.out.println("aa");
     }
 
+
+
     public static void sort(int[] num) {
         for (int i = 0; i < num.length; i++) {
             for (int j = i + 1; j < num.length; j++) {

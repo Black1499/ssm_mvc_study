@@ -51,7 +51,7 @@
         pen.font ="30px yahei";
         pen.fillText("lzx绘制", (myImg.width / x) - 100, (myImg.height / x) - 10);
         myCanvas.toBlob(function(b){
-           //这里发请求
+            //这里发请求
             console.log("压缩后："+b.size);
             var data = new FormData();
             data.append("aa",b);

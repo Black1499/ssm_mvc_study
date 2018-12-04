@@ -8,16 +8,13 @@
     <!--启用注解扫描-->
     <contxt:component-scan base-package="com.lzx.web"/>
 
+
     <!--启用 mvc 的常用注解-->
     <mvc:annotation-driven>
+        <!--解决@ResponsBody返回乱码-->
         <mvc:message-converters register-defaults="true">
             <bean class="org.springframework.http.converter.StringHttpMessageConverter">
-                <property name="supportedMediaTypes">
-                    <list>
-                        <value>text/html;charset=UTF-8</value>
-                        <value>application/json;charset=UTF-8</value>
-                    </list>
-                </property>
+                <constructor-arg value="UTF-8" />
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
@@ -81,6 +78,17 @@
         <property name="prefix" value="/WEB-INF/jsp/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
+
+
+    <mvc:annotation-driven conversion-service="conversionService"/>
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <property name="formatters">
+            <list>
+                <bean class="com.lzx.annotation.IdNumberFormatAnnotationFormatterFactory"/>
+            </list>
+        </property>
+    </bean>
+
 
     <!--配置上传下载-->
     <bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver"/>

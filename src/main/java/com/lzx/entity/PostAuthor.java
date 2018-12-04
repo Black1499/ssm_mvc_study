@@ -1,8 +1,11 @@
 package com.lzx.entity;
 
+import com.lzx.annotation.IdNumberFormat;
+
 import java.util.Date;
 
 public class PostAuthor {
+
     private Integer id;
 
     private String name;
@@ -10,6 +13,12 @@ public class PostAuthor {
     private Date birthday;
 
     private String sex;
+
+
+    @IdNumberFormat
+    private String idNum;
+
+
 
     public Integer getId() {
         return id;
@@ -24,7 +33,7 @@ public class PostAuthor {
     }
 
     public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+        this.name = name;
     }
 
     public Date getBirthday() {
@@ -40,6 +49,25 @@ public class PostAuthor {
     }
 
     public void setSex(String sex) {
-        this.sex = sex == null ? null : sex.trim();
+        this.sex = sex;
+    }
+
+    public String getIdNum() {
+        return idNum;
+    }
+
+    public void setIdNum(String idNum) {
+        this.idNum = idNum;
+    }
+
+    public PostAuthor() {
+    }
+
+    public PostAuthor(Integer id, String name, Date birthday, String sex, String idNum) {
+        this.id = id;
+        this.name = name;
+        this.birthday = birthday;
+        this.sex = sex;
+        this.idNum = idNum;
     }
 }

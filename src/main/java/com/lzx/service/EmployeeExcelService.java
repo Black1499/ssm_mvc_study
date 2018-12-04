@@ -33,7 +33,7 @@ public class EmployeeExcelService implements EmployeeExcel {
     }
 
     @Override
-    public byte[] writeExcel(List<Employee> list) {
+    public byte[] writeExcel(List<Employee> list) throws IOException {
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet sheet = workbook.createSheet("客户信息表");
         HSSFRow row1 = sheet.createRow(0);
@@ -55,15 +55,13 @@ public class EmployeeExcelService implements EmployeeExcel {
         }
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        try {
-            workbook.write(stream);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        workbook.write(stream);
+
         return stream.toByteArray();
     }
 
     // 导入excel
+    @Override
     public String readExcel(MultipartFile file) {
         try{
             Workbook workbook = null;
